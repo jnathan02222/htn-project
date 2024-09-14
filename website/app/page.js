@@ -4,7 +4,8 @@ import axios from 'axios';
 
 export default function Home() {
   const  [website, setWebsite] = useState("");
-  const submitForm = () => {
+  const submitForm = (e) => {
+    e.preventDefault();
     axios.post('/search', {
       website : website
     })
