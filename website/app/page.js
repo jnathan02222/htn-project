@@ -3,8 +3,10 @@ import {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
 
 export default function Home() {
-  const [linkCount, setLinkCount] = useState(null);
-  const [showForm, setShowForm] = useState(true); 
+  const actualSentenceCount = useRef(0);
+  const [sentenceCount, setSentenceCount] = useState(0);
+  const actualArticleCount = useRef(0);
+  const [articleCount, setArticleCount] = useState(0);
   const ws = useRef();
 
   useEffect(()=>{ 
@@ -14,18 +16,11 @@ export default function Home() {
     });
 
     ws.current.addEventListener("message", (event) => {
-      const message = event.data;
-      console.log("Received message: ", message);
-      
-      // Parse and set the number of links
-      try {
-        const parsedData = JSON.parse(message);
-        if (parsedData.type ==='linkCount' && parsedData.count !== undefined) {
-          setLinkCount(parsedData.count);
-          console.log(linkCount);
-        }
-      } catch (error) {
-        console.error("Error parsing WebSocket message:", error);
+      const message = JSON.parse(event.data);
+      if(message.sentencesParsed){
+        actualSentenceCount.current += parseInt(message.sentencesParsed.replace('\r', ''));
+      }else if(message.articlesAnalyzed){
+        actualArticleCount.current += parseInt(message.articlesAnalyzed.replace('\r', ''));
       }
     });
     
@@ -38,48 +33,83 @@ export default function Home() {
         ws.current.close();
       }
     };
-
-    
   }, [])
 
-  useEffect(() => {
-    if (linkCount !== null) {
-      console.log("Updated link count:", linkCount);
-      
+  const animationRef = useRef();
+  useEffect(()=>{
+    const animation = () => {
+      setSentenceCount(prev => {
+        if(actualSentenceCount.current - prev < 1){
+          return actualSentenceCount.current;
+        }
+        if(prev < actualSentenceCount.current){
+          return prev + (actualSentenceCount.current - prev)/5;
+        }else{
+          return prev;
+        }
+      });
+      setArticleCount(prev => {
+        if(actualArticleCount.current - prev < 1){
+          return actualArticleCount.current;
+        }
+        if(prev < actualArticleCount.current){
+          return prev + (actualArticleCount.current - prev)/5;
+        }else{
+          return prev;
+        }
+      });
+      animationRef.current = window.requestAnimationFrame(animation);
     }
-  }, [linkCount]);
+    animation();
+    return () => {
+      cancelAnimationFrame(animationRef.current);
+    }
+  }, [])
   
 
   const  [website, setWebsite] = useState("");
   const submitForm = (e) => {
     e.preventDefault();
+    actualSentenceCount.current = 0;
+    setSentenceCount(0);
+    actualArticleCount.current = 0;
+    setArticleCount(0);
     
-    setShowForm(false);
-    axios.post('/search', {
-      website : website
-    })
-    .catch((error) => {
-      console.error("Error during the search:", error);
-    });
+    if(ws.current){
+      ws.current.send((website.includes('http://') || website.includes('https://')) ? website : "http://" + website);
+    }
   }
   return (
-    <div className="min-h-screen w-full flex justify-center  p-24">
-            {showForm ? (
-        <form onSubmit={submitForm} className="flex flex-col items-center"> 
+    <div className="min-h-screen w-full flex justify-center p-24">
+      <div className='max-w-[1000px] 	'>
+        <div className='font-bold	text-5xl mb-5 leading-tight	'>Get the inside scoop. Personalized stock insights from your favourite websites.</div>
+        <div className='text-gray-500 text-2xl'>MoneyMoves analyzes market sentiment from hundreds of articles to help you invest.</div>
+        <div className='text-gray-500 text-2xl mb-5'>It all starts from one link.</div>
+        <form onSubmit={submitForm} className="flex items-center"> 
           <input
             name="website"
             onChange={(e) => setWebsite(e.target.value)}
             value={website}
-            placeholder="Enter a website!"
-            className="rounded-md border-2 p-2 hover:border-indigo-200 min-w-[500px] focus:border-indigo-200 focus:outline-none"
+            placeholder="Enter any website!"
+            className="text-xl rounded-md border-2 p-2 hover:border-indigo-200 w-full focus:border-indigo-200 focus:outline-none"
           />
-          <button type="submit" className="mt-2 rounded-md bg-indigo-200 text-black py-2 px-4 hover:bg-indigo-300">Search</button>
+          <button type="submit" className="text-xl ml-2 rounded-md bg-indigo-200 text-black py-2 px-4 hover:bg-indigo-300">Search</button>
         </form>
-      ) : (
-        <div className="mt-4 text-lg">
-          Number of links found: {linkCount}
-        </div>
-      )}
+        
+        {
+          sentenceCount > 0 && 
+          <div>
+            <div className="mt-4 text-3xl flex gap-1 items-end">
+            <div className="text-4xl font-bold items-baseline">{Math.floor(sentenceCount)}</div>
+            <div>sentences parsed.</div>
+            </div>
+            <div className="mt-4 text-3xl flex gap-1 items-end">
+              <div className="text-4xl font-bold items-baseline">{Math.floor(articleCount)}</div>
+              <div>articles analyzed.</div>
+            </div>
+          </div>
+        }
+      </div>
     </div>
   );
 }

@@ -340,7 +340,7 @@ def scrape_url(url : str):
     #Add links to queue
     for a in soup.find_all("a"):
         link : str = a.get('href')
-        if(link == None or link == "#" or link == ""):
+        if(link == None or "#" in link or link == ""):
             continue
         if(link[0] == "/"):
             link = link.replace('/', url, 1)
@@ -349,15 +349,22 @@ def scrape_url(url : str):
     #Determine if this is an article?
     #Get all text and check for companies then pass to ML
     texts = soup.findAll(text=True)
+    print("PARSED:" + str(len(texts)))
     visible_texts = []
     for element in texts:
         ticker = relevant(element)
+        #sys.stdout.flush()
         if(ticker):
             visible_texts.append([ticker, element.strip()])
 
+
     #Live updates to the client
     for line in visible_texts:
-        print(line[0]+":"+line[1])
+        try:
+            print(line[0]+":"+line[1])
+            sys.stdout.flush()
+        except:
+            pass
         
     articles += 1    
 

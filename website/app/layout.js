@@ -13,8 +13,8 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "HTN Project",
-  description: "A Project for HTN",
+  title: "MoneyMoves",
+  description: "Stock Insights from Any Website",
 };
 
 export default function RootLayout({ children }) {
