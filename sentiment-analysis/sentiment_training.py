@@ -83,6 +83,6 @@ def predict(text):
     print(result[0])
 
 # Save the model
-model.save('my_model.h5')
+model.save('my_model.keras')
 
-# model = tf.keras.models.load_model('my_model.h5')    
+# model = tf.keras.models.load_model('my_model.keras')    
