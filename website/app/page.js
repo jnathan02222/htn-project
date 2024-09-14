@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import NavBar from './Navbar';
+import BarChart from './barChart'
 
 export default function Home() {
   const actualSentenceCount = useRef(0);
@@ -88,9 +89,9 @@ export default function Home() {
       <div className="min-h-screen w-full flex justify-center p-24">
         
         <div className='max-w-[1000px] mt-10'>
-          <div className='font-bold	text-5xl mb-5 leading-tight	'>Get the inside scoop. Personalized stock insights from your favourite websites.</div>
-          <div className='text-gray-500 text-2xl'>MoneyMoves analyzes market sentiment from hundreds of articles to help you invest.</div>
-          <div className='text-gray-500 text-2xl mb-5'>It all starts from one link.</div>
+          <div className='font-bold	text-5xl mb-8 leading-tight	text-center'>Get the inside scoop. Personalized stock insights from your favourite websites.</div>
+          <div className='text-gray-500 text-2xl text-center'>MoneyMoves analyzes market sentiment from hundreds of articles to help you invest.</div>
+          <div className='text-gray-500 text-2xl mb-10 text-center'>It all starts from one link.</div>
           <form onSubmit={submitForm} className="flex items-center"> 
             <input
               name="website"

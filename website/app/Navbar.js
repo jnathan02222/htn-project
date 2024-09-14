@@ -2,7 +2,7 @@ export default function NavBar(){
     //bg-blue-100
     //bg-blue-100
     return(
-        <div className='flex justify-between items-center fixed w-full bg-blue-100'>
+        <div className='flex justify-between items-center fixed w-full bg-gradient-to-r from-blue-200 to-blue-100'>
             <div className='flex items-center px-5'>
                 <img className='p-2 rounded-full w-24 h-24 items-center' src='logo.svg'></img>
                 <h1 className='ml-5 font-bold text-2xl'>MoneyMoves</h1>
