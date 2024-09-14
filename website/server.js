@@ -1,13 +1,29 @@
 const express = require('express');
 const next = require('next');
 const { spawn } = require('node:child_process');
+const {WebSocketServer} = require('ws');
 
 const app = next({dev : true});
 const handle = app.getRequestHandler();
 const webscraperFilePath = "c:/Coding_Projects/htn-project/webscraper/webscraper.py";
 
+
+
+
 app.prepare().then(()=>{
     const server = express();
+    const wss = new WebSocketServer({ server });
+
+    wss.on('connection', function connection(ws) {
+        ws.on('error', console.error);
+      
+        ws.on('message', function message(data) {
+          console.log('received: %s', data);
+        });
+      
+        ws.send('something');
+    });
+
     server.use(express.json());
 
     server.post("/search", (req, res) => {

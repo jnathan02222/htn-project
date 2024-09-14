@@ -27,6 +27,7 @@ def scrape_url(url : str):
 
     #Determine if this is an article
     #TO DO: GET ALL TEXT AND CHECK FOR COMPANIES, then pass to ML
+    #Live updates to the client
     articles += 1    
 
 while(articles < max_articles and len(queue) > 0):

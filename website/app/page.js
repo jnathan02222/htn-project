@@ -14,7 +14,7 @@ export default function Home() {
     
   }
   return (
-    <div className="min-h-screen w-full flex justify-center items-center">
+    <div className="min-h-screen w-full flex justify-center  p-24">
       <form onSubmit={submitForm}> 
         <input name="website" onChange={(e)=>{setWebsite(e.target.value)}} value={website} placeholder="Enter a website!" className="rounded-md border-2 p-2 hover:border-indigo-200  min-w-[500px] focus:border-indigo-200 focus:outline-none"></input>
       </form>
