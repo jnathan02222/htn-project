@@ -4,13 +4,13 @@ import numpy as np
 import re
 from keras.preprocessing import sequence
 import sys
+import json
+import string
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 VOCAB_SIZE = 25000
 MAXLEN = 20
-BATCH_SIZE = 64
-SPLIT = 0.8
 
 encoding = {
     'negative': [1, 0, 0],
@@ -19,7 +19,13 @@ encoding = {
 }
 
 def clean_text(text):
-    text = re.sub(r'[^A-Za-z0-9 ]+', '', text)
+    text = text.lower()
+    text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
+    text = re.sub(r'<.*?>', '', text)
+    text = text.translate(str.maketrans('', '', string.punctuation))
+    text = re.sub(r'\d+', '', text)
+    text = text.strip()
+    text = re.sub(r'\s+', ' ', text)
     return text
 
 def label_encoding(labels):
@@ -60,9 +66,10 @@ history = model.fit(train_data, train_labels, epochs=10, validation_split=0.2)
 results = model.evaluate(test_data, test_labels)
 print(results)
 
-#########################################################################################
-
 word_index = vectorize_layer.get_vocabulary()
+
+with open('vocabulary.json', 'w') as f:
+    json.dump(word_index, f)
 
 def encode_text(text):
     tokens = tf.strings.split(text)
@@ -84,5 +91,3 @@ def predict(text):
 
 # Save the model
 model.save('my_model.keras')
-
-# model = tf.keras.models.load_model('my_model.keras')    
