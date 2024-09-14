@@ -1,8 +1,17 @@
 "use client"
-import {useState} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
 
 export default function Home() {
+  const ws = useRef();
+  useEffect(()=>{ 
+    ws.current = new WebSocket('ws://localhost:8080');
+    ws.current.addEventListener("open", (event) => {
+      console.log("Connected to server.");
+    });
+  }, [])
+
+
   const  [website, setWebsite] = useState("");
   const submitForm = (e) => {
     e.preventDefault();
@@ -10,8 +19,6 @@ export default function Home() {
       website : website
     })
     setWebsite("");
-    
-    
   }
   return (
     <div className="min-h-screen w-full flex justify-center  p-24">

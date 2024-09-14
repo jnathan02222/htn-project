@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import sys
+import time
+
 
 queue : list[str] = [sys.argv[1]]
 max_articles = int(sys.argv[2])
@@ -14,6 +16,7 @@ def scrape_url(url : str):
 
     global articles
     print(url)
+    sys.stdout.flush()
     soup = BeautifulSoup(requests.get(url).text, 'html.parser')
 
     #Add links to queue

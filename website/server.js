@@ -7,14 +7,13 @@ const app = next({dev : true});
 const handle = app.getRequestHandler();
 const webscraperFilePath = "c:/Coding_Projects/htn-project/webscraper/webscraper.py";
 
-
-
-
 app.prepare().then(()=>{
     const server = express();
     const wss = new WebSocketServer({ server });
 
     wss.on('connection', function connection(ws) {
+        console.log("Connected to")
+
         ws.on('error', console.error);
       
         ws.on('message', function message(data) {
@@ -28,7 +27,7 @@ app.prepare().then(()=>{
 
     server.post("/search", (req, res) => {
         const python = spawn('python', [webscraperFilePath, req.body.website, 100]);
-
+        
         python.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
         });
