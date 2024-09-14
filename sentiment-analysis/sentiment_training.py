@@ -60,6 +60,8 @@ history = model.fit(train_data, train_labels, epochs=10, validation_split=0.2)
 results = model.evaluate(test_data, test_labels)
 print(results)
 
+#########################################################################################
+
 word_index = vectorize_layer.get_vocabulary()
 
 def encode_text(text):
