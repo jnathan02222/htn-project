@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function Home() {
   const ws = useRef();
   useEffect(()=>{ 
-    ws.current = new WebSocket('ws://localhost:8080');
+    ws.current = new WebSocket('ws://localhost:8081');
     ws.current.addEventListener("open", (event) => {
       console.log("Connected to server.");
     });
