@@ -317,14 +317,14 @@ top_hundred = {
 
 def relevant(element):
     if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
-        return False
+        return None
     if isinstance(element, Comment):
-        return False
+        return None
     
     for name in top_hundred:
         if name in element:
-            return True
-    return False
+            return top_hundred[name]["Ticker"]
+    return None
     
 
 def scrape_url(url : str):
@@ -349,12 +349,15 @@ def scrape_url(url : str):
     #Determine if this is an article?
     #Get all text and check for companies then pass to ML
     texts = soup.findAll(text=True)
-    visible_texts = filter(relevant, texts)  
+    visible_texts = []
+    for element in texts:
+        ticker = relevant(element)
+        if(ticker):
+            visible_texts.append([ticker, element.strip()])
+
     #Live updates to the client
     for line in visible_texts:
-        line = line.strip()
-        if(line != ""):
-            print(line)
+        print(f"{line[0]}:{line[1]}")
     articles += 1    
 
 while(articles < max_articles and len(queue) > 0):
