@@ -11,7 +11,7 @@ def scrape_url(url : str):
     if(url in visited):
         return
     visited[url] = True
-    
+
     global articles
     print(url)
     soup = BeautifulSoup(requests.get(url).text, 'html.parser')
@@ -26,6 +26,7 @@ def scrape_url(url : str):
         queue.append(link)
 
     #Determine if this is an article
+    #TO DO: GET ALL TEXT AND CHECK FOR COMPANIES, then pass to ML
     articles += 1    
 
 while(articles < max_articles and len(queue) > 0):
