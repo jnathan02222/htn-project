@@ -1,35 +1,36 @@
 const express = require('express');
 const next = require('next');
 const { spawn } = require('node:child_process');
-const {WebSocketServer} = require('ws');
+const { WebSocketServer } = require('ws');
+const http = require('http');
+var { createServer } = require('http');
 
-const app = next({dev : true});
+const app = next({ dev: true });
 const handle = app.getRequestHandler();
-const webscraperFilePath = "c:/Coding_Projects/htn-project/webscraper/webscraper.py";
+const webscraperFilePath = "/Users/cherylz/htn-project/webscraper/webscraper.py";
 
-app.prepare().then(()=>{
+let linkCount =0;
+
+app.prepare().then(() => {
     const server = express();
-    const wss = new WebSocketServer({ server });
-
-    wss.on('connection', function connection(ws) {
-        console.log("Connected to")
-
-        ws.on('error', console.error);
-      
-        ws.on('message', function message(data) {
-          console.log('received: %s', data);
-        });
-      
-        ws.send('something');
-    });
-
     server.use(express.json());
-
     server.post("/search", (req, res) => {
         const python = spawn('python', [webscraperFilePath, req.body.website, 100]);
         
+        let urls = [];
         python.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
+            const lines = data.toString().split('\n').filter(line => line.trim() !== '');
+            urls = [...urls, ...lines];
+
+            linkCount = urls.length;
+            // Broadcast the new link count to all WebSocket clients
+            wss.clients.forEach(client => {
+                if (client.readyState === client.OPEN) {
+                    client.send(JSON.stringify({ type: 'linkCount', count: linkCount }));
+                }
+            });
+            res.json({ count: linkCount });
         });
 
         python.stderr.on('data', (data) => {
@@ -38,7 +39,7 @@ app.prepare().then(()=>{
 
         python.on('close', (code) => {
             console.log(`child process exited with code ${code}`);
-        }); 
+        });
     });
 
     server.all("*", (req, res) => {
@@ -47,6 +48,24 @@ app.prepare().then(()=>{
 
     server.listen(8080, () => {
         console.log("Listening on 8080")
-    })
+    });
+
 });
 
+
+const server = createServer();
+const wss = new WebSocketServer({ server });
+
+wss.on('connection', function connection(ws) {
+    ws.send(JSON.stringify({ type: 'linkCount', count: linkCount }));
+    ws.on('error', console.error);
+
+    ws.on('message', function message(data) {
+        console.log('received: %s', data);
+    });
+
+});
+
+server.listen(8081, () => {
+    console.log("Listening on 8081")
+});
