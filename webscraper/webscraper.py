@@ -358,6 +358,7 @@ def scrape_url(url : str):
     #Live updates to the client
     for line in visible_texts:
         print(line[0]+":"+line[1])
+        
     articles += 1    
 
 while(articles < max_articles and len(queue) > 0):
