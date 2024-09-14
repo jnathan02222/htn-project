@@ -1,5 +1,6 @@
+// page.js
 "use client"
-import {useState, useEffect, useRef} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import NavBar from './Navbar';
 
@@ -9,6 +10,7 @@ export default function Home() {
   const actualArticleCount = useRef(0);
   const [articleCount, setArticleCount] = useState(0);
   const ws = useRef();
+  // const [chartData, setChartData] = useState([0.5, 0.5, 0.5]);
 
   useEffect(()=>{ 
     ws.current = new WebSocket('ws://localhost:8081/ws');
@@ -24,7 +26,7 @@ export default function Home() {
         actualArticleCount.current += parseInt(message.articlesAnalyzed.replace('\r', ''));
       }
     });
-    
+
     ws.current.addEventListener("close", () => {
       console.log("Disconnected from server.");
     });
@@ -68,7 +70,7 @@ export default function Home() {
   }, [])
   
 
-  const  [website, setWebsite] = useState("");
+  const [website, setWebsite] = useState("");
   const submitForm = (e) => {
     e.preventDefault();
     actualSentenceCount.current = 0;
