@@ -1,6 +1,7 @@
 "use client"
 import {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
+import NavBar from './Navbar';
 
 export default function Home() {
   const [linkCount, setLinkCount] = useState(null);
@@ -63,23 +64,26 @@ export default function Home() {
     });
   }
   return (
-    <div className="min-h-screen w-full flex justify-center  p-24">
-            {showForm ? (
-        <form onSubmit={submitForm} className="flex flex-col items-center"> 
-          <input
-            name="website"
-            onChange={(e) => setWebsite(e.target.value)}
-            value={website}
-            placeholder="Enter a website!"
-            className="rounded-md border-2 p-2 hover:border-indigo-200 min-w-[500px] focus:border-indigo-200 focus:outline-none"
-          />
-          <button type="submit" className="mt-2 rounded-md bg-indigo-200 text-black py-2 px-4 hover:bg-indigo-300">Search</button>
-        </form>
-      ) : (
-        <div className="mt-4 text-lg">
-          Number of links found: {linkCount}
-        </div>
-      )}
-    </div>
+    <>
+      <NavBar></NavBar>
+      <div className="min-h-screen w-full flex justify-center p-24">
+              {showForm ? (
+          <form onSubmit={submitForm} className="flex flex-col items-center"> 
+            <input
+              name="website"
+              onChange={(e) => setWebsite(e.target.value)}
+              value={website}
+              placeholder="Enter a website!"
+              className="rounded-md border-2 p-2 hover:border-indigo-200 min-w-[500px] focus:border-indigo-200 focus:outline-none"
+            />
+            <button type="submit" className="mt-2 rounded-md bg-indigo-200 text-black py-2 px-4 hover:bg-indigo-300">Search</button>
+          </form>
+        ) : (
+          <div className="mt-4 text-lg">
+            Number of links found: {linkCount}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
