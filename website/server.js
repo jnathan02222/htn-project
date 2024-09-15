@@ -4,6 +4,7 @@ const next = require('next');
 const { spawn } = require('node:child_process');
 const {WebSocketServer} = require('ws');
 var { createServer } = require('http');
+const cors = require('cors');
 
 const app = next({ dev: true });
 const handle = app.getRequestHandler();
@@ -13,6 +14,7 @@ const modelFilePath = __dirname + "\\..\\sentiment-analysis\\model_executor.py";
 app.prepare().then(() => {
     const server = express();
     server.use(express.json());
+    server.use(cors());
     server.all("*", (req, res) => {
         return handle(req, res);
     });
