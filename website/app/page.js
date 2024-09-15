@@ -118,7 +118,7 @@ export default function Home() {
               onChange={(e) => setWebsite(e.target.value)}
               value={website}
               placeholder="Enter any website!"
-              className="text-xl rounded-md border-2 p-2 hover:border-indigo-200 w-full focus:border-indigo-200 focus:outline-none"
+              className="text-xl rounded-md border-2 p-2 hover:border-indigo-200 w-full focus:border-indigo-100 focus:outline-none"
             />
             <button type="submit" className="text-xl ml-2 rounded-md bg-indigo-200 text-black py-2 px-4 hover:bg-indigo-300">Search</button>
           </form>
