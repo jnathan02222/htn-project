@@ -11,7 +11,7 @@ const BarChart = ({ data }) => {
     labels: ['ARM', 'LIN', 'AZN', 'BKR', 'AVGO', 'BIIB', 'BKNG', 'CDNS', 'ARM', 'LIN', 'AZN', 'BKR', 'AVGO', 'BIIB', 'BKNG', 'CDNS'], // x values
     datasets: [
       {
-        label: '',
+        label: 'CNN',
         data: data, // y values (must be <= 1)
         backgroundColor: ['rgba(199, 210, 254, 0.5)'],
         borderColor: ['rgba(199, 210, 254, 0.5)'],
@@ -20,7 +20,7 @@ const BarChart = ({ data }) => {
 
       },
       {
-        label: '',
+        label: 'Fox News',
         data: data.map(val=>val/2), // y values (must be <= 1)
         backgroundColor: ['rgba(199, 210, 254, 0.5)'],
         borderColor: ['rgba(199, 210, 254, 0.5)'],
@@ -39,7 +39,7 @@ const BarChart = ({ data }) => {
       },
     plugins: {
       legend: {
-        display: false
+        display: true
       },
       tooltip: {
         enabled: false
@@ -78,3 +78,4 @@ const BarChart = ({ data }) => {
 };
 
 export default BarChart;
+ 

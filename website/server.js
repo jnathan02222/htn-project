@@ -7,12 +7,8 @@ var { createServer } = require('http');
 
 const app = next({ dev: true });
 const handle = app.getRequestHandler();
-<<<<<<< HEAD
 const webscraperFilePath = __dirname + "\\..\\webscraper\\webscraper.py";
 const modelFilePath = __dirname + "\\..\\sentiment-analysis\\model_executor.py";
-=======
-const webscraperFilePath = "/Users/cherylz/htn-project/webscraper/webscraper.py";
->>>>>>> origin/frontend
 
 app.prepare().then(() => {
     const server = express();

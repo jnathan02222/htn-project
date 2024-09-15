@@ -135,8 +135,7 @@ export default function Home() {
             />
             <button type="submit" className="text-xl ml-2 rounded-md bg-indigo-200 text-black py-2 px-4 hover:bg-indigo-300 shadow-lg">Search</button>
           </form>
-            {/* <BarChart data={chartData} /> */}
-           <div ref={resultRef} style={{ marginTop: '100vh' }}>
+           
           {
             showStats && 
             <div>
@@ -155,7 +154,7 @@ export default function Home() {
           } 
         </div>
       </div>
-      </div>
+      
     </>
   );
 }
