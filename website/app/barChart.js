@@ -1,15 +1,42 @@
 // BarChart.js
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
 // Register the required components for Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const BarChart = ({ data }) => {
-  const chartData = {
-    labels: ['ARM', 'LIN', 'AZN', 'BKR', 'AVGO', 'BIIB', 'BKNG', 'CDNS', 'ARM', 'LIN', 'AZN', 'BKR', 'AVGO', 'BIIB', 'BKNG', 'CDNS'], // x values
-    datasets: [
+const BarChart = ({ data, labels }) => {
+  const [datasets, setDatasets] = useState([]);
+
+  function getData(value){
+    var d = [];
+    for(const ticker of labels){
+      if(value[ticker]){
+        d.push(value[ticker][0] * 2 - 1);
+      }else{
+        d.push(0);
+      }
+    }
+    return d;
+  }
+
+  useEffect(()=>{
+    var ds = [];
+    for (const [key, value] of Object.entries(data)) {
+      ds.push({
+        label : key,
+        data : getData(value),
+        backgroundColor: ['rgba(199, 210, 254, 0.5)'],
+        borderColor: ['rgba(199, 210, 254, 0.5)'],
+        borderWidth: 1,
+        grouped: false,
+      })
+    }
+    setDatasets(ds);
+    /*
+    [
       {
         label: 'CNN',
         data: data, // y values (must be <= 1)
@@ -18,23 +45,18 @@ const BarChart = ({ data }) => {
         borderWidth: 1,
         grouped: false,
 
-      },
-      {
-        label: 'Fox News',
-        data: data.map(val=>val/2), // y values (must be <= 1)
-        backgroundColor: ['rgba(199, 210, 254, 0.5)'],
-        borderColor: ['rgba(199, 210, 254, 0.5)'],
-        borderWidth: 1,
-        grouped: false,
-
       }
-    ],
-  };
+    ]
+    */
+    
+  }, [data])
+
+  
 
   const options = {
     responsive: true,
     animation: {
-        duration: 1000, // Duration of the animation in milliseconds
+        duration: 100, // Duration of the animation in milliseconds
         easing: 'linear', // Easing function for the animation
       },
     plugins: {
@@ -72,7 +94,7 @@ const BarChart = ({ data }) => {
 
   return (
     <div style={{ width: '1000px', height: '500px' }}>
-      <Bar data={chartData} options={options} />
+      <Bar data={{labels : labels, datasets : datasets}} options={options} />
     </div>
   );
 };
