@@ -11,7 +11,7 @@ export default function NavBar(){
                 <li><button className='px-5 text-lg'>About Us</button></li>
                 <li><button className='px-5 text-lg'>Contact Us</button></li>
                 <li><button className='px-5 text-lg'>Sign In</button></li>
-                <li><button className='px-5 m-2 text-lg py-2 bg-white rounded-full'>Sign Up</button></li>
+                <li><button className='px-5 m-2 text-lg py-2 bg-white rounded-full shadow-md'>Sign Up</button></li>
             </ul>
         </div>
     )
