@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import NavBar from './Navbar';
 import BarChart from './barChart'
+import Slider from './Slider';
 
 export default function Home() {
   const actualSentenceCount = useRef(0);
@@ -11,6 +12,9 @@ export default function Home() {
   const actualArticleCount = useRef(0);
   const [articleCount, setArticleCount] = useState(0);
   const [showStats, setShowStats] = useState(false);
+  const [value, setValue] = useState(100);
+
+
   const ws = useRef();
   // const [chartData, setChartData] = useState([0.5, 0.5, 0.5]);
   const resultRef = useRef(null); // Create a ref for the result section
@@ -94,7 +98,7 @@ export default function Home() {
     }, 500);
 
     if(ws.current){
-      ws.current.send((website.includes('http://') || website.includes('https://')) ? website : "http://" + website);
+      ws.current.send(JSON.stringify({website : (website.includes('http://') || website.includes('https://')) ? website : "http://" + website, articles: value}));
     }
 
     if (resultRef.current) {
@@ -124,8 +128,9 @@ export default function Home() {
         <div className='max-w-[1000px] mt-10'>
           <div className='font-bold	text-5xl my-8 leading-tight	text-center'>Personalized stock insights from your favourite websites.</div>
           <div className='text-gray-500 text-2xl text-center'>MoneyMoves analyzes market sentiment from hundreds of articles to help you invest.</div>
-          <div className='text-gray-500 text-2xl mb-10 text-center'>It all starts with one link.</div>
-          <form onSubmit={submitForm} className="flex items-center mb-10"> 
+          <div className='text-gray-500 text-2xl mb-10 text-center'>It all starts one link at a time.</div>
+          <form onSubmit={submitForm} className="flex items-center">
+            <Slider value={value} setValue={setValue}></Slider> 
             <input
               name="website"
               onChange={(e) => setWebsite(e.target.value)}

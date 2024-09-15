@@ -29,7 +29,9 @@ wss.on('connection', function connection(ws) {
     ws.on('error', console.error);
 
     ws.on('message', function message(data) {
-        const python = spawn('python', [webscraperFilePath, data, 100]);
+        const info = JSON.parse(data);
+        
+        const python = spawn('python', [webscraperFilePath, info.website, info.articles]);
         
         python.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
