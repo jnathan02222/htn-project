@@ -36,26 +36,4 @@ print(results)
 
 word_index = imdb.get_word_index()
 
-with open('vocabulary.json', 'w') as f:
-    json.dump(word_index, f)
-
-def encode_text(text):
-  tokens = tf.strings.split(text)
-  tokens = [word.decode('utf-8') for word in tokens.numpy()]  
-  for word in tokens:
-      if word in word_index:
-          tokens.append(word)
-      else:
-          tokens.append(0)
-  return sequence.pad_sequences([tokens], MAXLEN)[0]
-
-def predict(text):
-    encoded_text = encode_text(text)
-    pred = np.zeros((1, MAXLEN))
-    pred[0] = encoded_text
-    result = model.predict(pred)
-
-positive_review = "That movie was so awesome! I really loved it and would great watch it again because it was amazingly great"
-predict(positive_review)
-
 model.save('my_model.keras')

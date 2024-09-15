@@ -1,3 +1,4 @@
+from keras.datasets import imdb
 import tensorflow as tf
 import numpy as np
 from keras.preprocessing import sequence
@@ -6,12 +7,10 @@ import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-with open('vocabulary.json', 'r') as f:
-    word_index = json.load(f)
-
 MAXLEN = 20
 
 model = tf.keras.models.load_model('my_model.keras')
+word_index = imdb.get_word_index()
 
 def encode_text(text):
     tokens = tf.strings.split(text)
@@ -19,7 +18,7 @@ def encode_text(text):
     int_tokens = []
     for word in tokens:
         if word in word_index:
-            int_tokens.append(word_index.index(word))
+            int_tokens.append(word_index[word])
         else:
             int_tokens.append(0)
     return sequence.pad_sequences([np.array(int_tokens)], maxlen=MAXLEN)[0]
@@ -33,5 +32,7 @@ def predict(text):
     
 input = "happy mother`s day to all moms out there..."    
 predict(input)
+
+print(model.summary())
 
     
