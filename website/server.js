@@ -7,7 +7,8 @@ var { createServer } = require('http');
 
 const app = next({ dev: true });
 const handle = app.getRequestHandler();
-const webscraperFilePath = "C:/Coding_Projects/htn-project/webscraper/webscraper.py";
+const webscraperFilePath = __dirname + "\\..\\webscraper\\webscraper.py";
+const modelFilePath = __dirname + "\\..\\sentiment-analysis\\model_executor.py";
 
 app.prepare().then(() => {
     const server = express();
@@ -38,6 +39,24 @@ wss.on('connection', function connection(ws) {
                     ws.send(JSON.stringify({sentencesParsed : line.replace("PARSED:", "")}))
                 }else if(line.includes("SCRAPING:")){
                     ws.send(JSON.stringify({articlesAnalyzed : "1"}))
+                }else if(line.includes("MODEL:")){
+                    
+                    const [header, ticker, value] = line.split(":", 3);
+                    ws.send(JSON.stringify({ticker : ticker, value : value}))
+
+                    /*
+                    const model = spawn('python', [modelFilePath, sentence]);
+
+                    model.stdout.on('data', (data) => {
+                        console.log(`stdout: ${data}`);
+                        ws.send(JSON.stringify({ticker : ticker, value : data.toString().replace("\r\n", "")}))
+                    });
+                    model.stderr.on('data', (data) => {
+                        console.error(`stderr: ${data}`);
+                    });
+                    model.on('close', (code) => {
+                        console.log(`child process exited with code ${code}`);
+                    });*/
                 }
             }
         });

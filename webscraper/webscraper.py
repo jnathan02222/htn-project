@@ -2,7 +2,39 @@ import requests
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 import sys
+import tensorflow as tf
+import numpy as np
+from keras.preprocessing import sequence
+import json
+import sys
 
+sys.stdout.reconfigure(encoding='utf-8')
+
+with open('vocabulary.json', 'r') as f:
+    word_index = json.load(f)
+
+MAXLEN = 20
+
+model = tf.keras.models.load_model('my_model.keras')
+
+def encode_text(text):
+    tokens = tf.strings.split(text)
+    tokens = [word.decode('utf-8') for word in tokens.numpy()]
+    int_tokens = []
+    for word in tokens:
+        if word in word_index:
+            int_tokens.append(word_index.index(word))
+        else:
+            int_tokens.append(0)
+    return sequence.pad_sequences([np.array(int_tokens)], maxlen=MAXLEN)[0]
+
+def predict(text, ticker):
+    encoded_text = encode_text(text)
+    pred = np.zeros((1, MAXLEN))
+    pred[0] = encoded_text
+    result = model.predict(pred)
+    print("MODEL:"+ticker+":"+str(result[0]).replace("\r", ""))
+    
 
 queue : list[str] = [sys.argv[1]]
 max_articles = int(sys.argv[2])
@@ -326,17 +358,22 @@ def relevant(element):
             return top_hundred[name]["Ticker"]
     return None
     
-
 def scrape_url(url : str):
     if(url in visited):
         return
     visited[url] = True
 
     global articles
+    
+    
+    try:
+        soup = BeautifulSoup(requests.get(url).text, 'html.parser')
+    except:
+        return
+
     print("SCRAPING: " + url)
     sys.stdout.flush()
-    soup = BeautifulSoup(requests.get(url).text, 'html.parser')
-
+    
     #Add links to queue
     for a in soup.find_all("a"):
         link : str = a.get('href')
@@ -361,7 +398,7 @@ def scrape_url(url : str):
     #Live updates to the client
     for line in visible_texts:
         try:
-            print(line[0]+":"+line[1])
+            predict(line[1], line[0])
             sys.stdout.flush()
         except:
             pass

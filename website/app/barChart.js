@@ -8,15 +8,26 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const BarChart = ({ data }) => {
   const chartData = {
-    labels: ['Positive', 'Negative', 'Neutral'], // x values
+    labels: ['ARM', 'LIN', 'AZN', 'BKR', 'AVGO', 'BIIB', 'BKNG', 'CDNS', 'ARM', 'LIN', 'AZN', 'BKR', 'AVGO', 'BIIB', 'BKNG', 'CDNS'], // x values
     datasets: [
       {
-        label: 'Sentiment Analysis',
+        label: '',
         data: data, // y values (must be <= 1)
-        backgroundColor: ['rgba(189, 231, 189,0.5)','rgba(255, 105, 98, 0.5)', 'rgba(243, 241, 239, 0.5)'],
-        borderColor: ['rgba(189, 231, 189,0.5)','rgba(255, 105, 98, 0.5)', 'rgba(243, 241, 239, 0.5)'],
+        backgroundColor: ['rgba(199, 210, 254, 0.5)'],
+        borderColor: ['rgba(199, 210, 254, 0.5)'],
         borderWidth: 1,
+        grouped: false,
+
       },
+      {
+        label: '',
+        data: data.map(val=>val/2), // y values (must be <= 1)
+        backgroundColor: ['rgba(199, 210, 254, 0.5)'],
+        borderColor: ['rgba(199, 210, 254, 0.5)'],
+        borderWidth: 1,
+        grouped: false,
+
+      }
     ],
   };
 
@@ -28,37 +39,39 @@ const BarChart = ({ data }) => {
       },
     plugins: {
       legend: {
-        position: 'top',
+        display: false
       },
       tooltip: {
-        callbacks: {
-          label: function (context) {
-            return `${context.label}: ${context.raw}`;
-          },
-        },
+        enabled: false
+        
       },
     },
     scales: {
-        x:{
-            grid:{
-                display: false
-            },
-        },
+      x:{
+          grid:{
+              display: false
+          },
+          
+          offset: true,
+      },
       y: {
-        min: 0,
+        min: -1,
         max: 1,
         ticks: {
-          stepSize: 0.5,
+          stepSize: 1,
         },
         grid:{
             display: false
         },
+        beginAtZero: true,
       },
     },
+    barPercentage: 1.0, 
+    categoryPercentage: 1.0, 
   };
 
   return (
-    <div style={{ width: '400px', height: '600px' }}>
+    <div style={{ width: '1000px', height: '500px' }}>
       <Bar data={chartData} options={options} />
     </div>
   );

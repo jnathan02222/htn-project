@@ -31,7 +31,7 @@ def predict(text):
     result = model.predict(pred)
     print(result[0])
     
-input = sys.argv1    
-predict(input)
+input = sys.argv[1] 
+print(predict(input))
 
     
