@@ -12,7 +12,7 @@ export default function Home() {
   const actualArticleCount = useRef(0);
   const [articleCount, setArticleCount] = useState(0);
   const [showStats, setShowStats] = useState(false);
-  const [value, setValue] = useState(100);
+  const [value, setValue] = useState();
 
 
   const ws = useRef();
@@ -130,13 +130,24 @@ export default function Home() {
           <div className='text-gray-500 text-2xl text-center'>MoneyMoves analyzes market sentiment from hundreds of articles to help you invest.</div>
           <div className='text-gray-500 text-2xl mb-10 text-center'>It all starts one link at a time.</div>
           <form onSubmit={submitForm} className="flex items-center">
-            <Slider value={value} setValue={setValue}></Slider> 
+            <input
+              onChange={(e) => setValue(e.target.value)}
+              value={value}
+              placeholder="# of Articles"
+              className="text-xl rounded-md border-2 p-2 hover:border-indigo-200 w-[200px] focus:border-indigo-100 focus:outline-none mr-2"
+              required={true}
+              type="number"
+              min="1"
+              max="1000"
+              step="1"
+            />
             <input
               name="website"
               onChange={(e) => setWebsite(e.target.value)}
               value={website}
               placeholder="Enter any website!"
               className="text-xl rounded-md border-2 p-2 hover:border-indigo-200 w-full focus:border-indigo-100 focus:outline-none"
+              required={true}
             />
             <button type="submit" className="text-xl ml-2 rounded-md bg-indigo-200 text-black py-2 px-4 hover:bg-indigo-300 shadow-lg">Search</button>
           </form>
@@ -145,7 +156,7 @@ export default function Home() {
             showStats && 
             <div>
               <BarChart data={[1, 0.75, 0.5, 0.25, -0.25, -0.5, -0.75, -1, 1, 0.75, 0.5, 0.25, -0.25, -0.5, -0.75, -1]}></BarChart>
-              <div className='flex justify-center mb-[40px]'>
+              <div className='flex justify-center mb-[50px]'>
                 <div className="mt-4 text-3xl flex gap-1 items-end mr-20">
                   <div className="text-4xl font-bold items-baseline">{Math.floor(sentenceCount)}</div>
                   <div>sentences parsed</div>
