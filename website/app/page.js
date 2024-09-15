@@ -13,6 +13,7 @@ export default function Home() {
   const [showStats, setShowStats] = useState(false);
   const ws = useRef();
   // const [chartData, setChartData] = useState([0.5, 0.5, 0.5]);
+  const resultRef = useRef(null); // Create a ref for the result section
 
   useEffect(()=>{ 
     ws.current = new WebSocket('ws://localhost:8081/ws');
@@ -95,7 +96,26 @@ export default function Home() {
     if(ws.current){
       ws.current.send((website.includes('http://') || website.includes('https://')) ? website : "http://" + website);
     }
+
+    if (resultRef.current) {
+      resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
+  // useEffect(() => {
+  //   // Example: Update data every 3 seconds
+  //   const interval = setInterval(() => {
+  //     setChartData(prev => [
+  //       Math.random(), // Simulate Positive
+  //       Math.random(), // Simulate Negative
+  //       Math.random(), // Simulate Neutral
+  //     ]);
+  //   }, 3000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
+
+ 
+
   return (
     <>
       <NavBar></NavBar>
@@ -111,11 +131,12 @@ export default function Home() {
               onChange={(e) => setWebsite(e.target.value)}
               value={website}
               placeholder="Enter any website!"
-              className="text-xl rounded-md border-2 p-2 hover:border-indigo-200 w-full focus:border-indigo-200 focus:outline-none shadow-lg"
+              className="text-xl rounded-md border-2 p-2 hover:border-indigo-200 w-full focus:border-indigo-100 focus:outline-none"
             />
-            <button type="submit" className="text-xl ml-2 rounded-md bg-indigo-200 text-black py-2 px-4 hover:bg-indigo-300 transition ease-in-out delay-150 hover:scale-110 duration-300">Search</button>
+            <button type="submit" className="text-xl ml-2 rounded-md bg-indigo-200 text-black py-2 px-4 hover:bg-indigo-300 shadow-lg">Search</button>
           </form>
-          
+            {/* <BarChart data={chartData} /> */}
+           <div ref={resultRef} style={{ marginTop: '100vh' }}>
           {
             showStats && 
             <div>
@@ -133,6 +154,7 @@ export default function Home() {
             </div>
           } 
         </div>
+      </div>
       </div>
     </>
   );
