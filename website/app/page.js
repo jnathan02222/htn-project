@@ -12,6 +12,7 @@ export default function Home() {
   const [articleCount, setArticleCount] = useState(0);
   const ws = useRef();
   // const [chartData, setChartData] = useState([0.5, 0.5, 0.5]);
+  const resultRef = useRef(null); // Create a ref for the result section
 
   useEffect(()=>{ 
     ws.current = new WebSocket('ws://localhost:8081/ws');
@@ -82,7 +83,26 @@ export default function Home() {
     if(ws.current){
       ws.current.send((website.includes('http://') || website.includes('https://')) ? website : "http://" + website);
     }
+
+    if (resultRef.current) {
+      resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
+  // useEffect(() => {
+  //   // Example: Update data every 3 seconds
+  //   const interval = setInterval(() => {
+  //     setChartData(prev => [
+  //       Math.random(), // Simulate Positive
+  //       Math.random(), // Simulate Negative
+  //       Math.random(), // Simulate Neutral
+  //     ]);
+  //   }, 3000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
+
+ 
+
   return (
     <>
       <NavBar></NavBar>
@@ -102,7 +122,8 @@ export default function Home() {
             />
             <button type="submit" className="text-xl ml-2 rounded-md bg-indigo-200 text-black py-2 px-4 hover:bg-indigo-300">Search</button>
           </form>
-          
+            {/* <BarChart data={chartData} /> */}
+           <div ref={resultRef} style={{ marginTop: '100vh' }}>
           {
             sentenceCount > 0 && 
             <div>
@@ -116,6 +137,8 @@ export default function Home() {
               </div>
             </div>
           }
+          </div>
+
         </div>
       </div>
     </>

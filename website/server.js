@@ -7,7 +7,7 @@ var { createServer } = require('http');
 
 const app = next({ dev: true });
 const handle = app.getRequestHandler();
-const webscraperFilePath = "C:/Coding_Projects/htn-project/webscraper/webscraper.py";
+const webscraperFilePath = "/Users/cherylz/htn-project/webscraper/webscraper.py";
 
 app.prepare().then(() => {
     const server = express();

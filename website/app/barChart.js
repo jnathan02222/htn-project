@@ -8,13 +8,13 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const BarChart = ({ data }) => {
   const chartData = {
-    labels: ['Positive', 'Negative', 'Neutral'], // x values
+    labels: ['Positive', 'Negative'], // x values
     datasets: [
       {
         label: 'Sentiment Analysis',
         data: data, // y values (must be <= 1)
-        backgroundColor: ['rgba(189, 231, 189,0.5)','rgba(255, 105, 98, 0.5)', 'rgba(243, 241, 239, 0.5)'],
-        borderColor: ['rgba(189, 231, 189,0.5)','rgba(255, 105, 98, 0.5)', 'rgba(243, 241, 239, 0.5)'],
+        backgroundColor: ['rgba(189, 231, 189,0.5)','rgba(255, 105, 98, 0.5)'],
+        borderColor: ['rgba(189, 231, 189,0.5)','rgba(255, 105, 98, 0.5)'],
         borderWidth: 1,
       },
     ],
