@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import NavBar from './Navbar';
 import BarChart from './barChart'
+import Slider from './Slider';
 
 export default function Home() {
   const actualSentenceCount = useRef(0);
@@ -92,7 +93,8 @@ export default function Home() {
           <div className='font-bold	text-5xl my-8 leading-tight	text-center'>Personalized stock insights from your favourite websites.</div>
           <div className='text-gray-500 text-2xl text-center'>MoneyMoves analyzes market sentiment from hundreds of articles to help you invest.</div>
           <div className='text-gray-500 text-2xl mb-10 text-center'>It all starts one link at a time.</div>
-          <form onSubmit={submitForm} className="flex items-center"> 
+          <form onSubmit={submitForm} className="flex items-center">
+            <Slider></Slider> 
             <input
               name="website"
               onChange={(e) => setWebsite(e.target.value)}
