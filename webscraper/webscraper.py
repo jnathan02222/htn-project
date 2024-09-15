@@ -33,7 +33,7 @@ def predict(text, ticker):
     pred = np.zeros((1, MAXLEN))
     pred[0] = encoded_text
     result = model.predict(pred)
-    print("MODEL:"+ticker+":"+str(result[0]).replace("\r", ""))
+    print("MODEL:"+ticker+":"+str(result[0][0]).replace("\r", ""))
     
 
 queue : list[str] = [sys.argv[1]]

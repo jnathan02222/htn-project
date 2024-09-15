@@ -44,7 +44,7 @@ wss.on('connection', function connection(ws) {
                 }else if(line.includes("MODEL:")){
                     
                     const [header, ticker, value] = line.split(":", 3);
-                    ws.send(JSON.stringify({ticker : ticker, value : value}))
+                    ws.send(JSON.stringify({ticker : ticker, value : value.replace("\r", "")}))
 
                     /*
                     const model = spawn('python', [modelFilePath, sentence]);
